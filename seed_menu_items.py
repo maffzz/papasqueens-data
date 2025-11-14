@@ -1,5 +1,6 @@
 import uuid
 import os
+from decimal import Decimal
 import boto3
 
 # Configuración
@@ -232,9 +233,9 @@ def build_items_for_tenant(tenant_id: str):
             "tenant_id": tenant_id,
             "nombre": base["nombre"],
             "descripcion": base["descripcion"],
-            "precio": base["precio"],
-            "precio_original": base["precio_original"],
-            "descuento_porcentaje": base["descuento_porcentaje"],
+            "precio": Decimal(str(base["precio"])),
+            "precio_original": Decimal(str(base["precio_original"])),
+            "descuento_porcentaje": Decimal(str(base["descuento_porcentaje"])),
             "categoria": base["categoria"],
             "image_key": base.get("image_key"),
             "image_url": f"https://{S3_BUCKET_NAME}.s3.amazonaws.com/{base['image_key']}" if base.get("image_key") else None,
