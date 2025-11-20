@@ -9,9 +9,10 @@ DYNAMO_REGION = "us-east-1"
 TABLE_NAME = "Staff"
 
 TENANTS = [
-    "tenant_pq_barranco",
-    "tenant_pq_san_isidro",
-    "tenant_pq_miraflores",
+    "tenant_pq_barranco",      # Sede Barranco (UTEC)
+    "tenant_pq_puruchuco",     # Sede Puruchuco
+    "tenant_pq_villamaria",    # Sede Villa María
+    "tenant_pq_jiron",         # Sede Jirón
 ]
 
 STAFF_PER_TENANT = [
@@ -34,7 +35,7 @@ STAFF_PER_TENANT = [
         "phone": "+51 900000002",
         "status": "activo",
     },
-    # 5 staff (cocina/mostrador)
+    # 3 staff (cocina/mostrador)
     {
         "id_staff_suffix": "staff1",
         "name": "Staff 1",
@@ -62,25 +63,7 @@ STAFF_PER_TENANT = [
         "phone": "+51 900000103",
         "status": "activo",
     },
-    {
-        "id_staff_suffix": "staff4",
-        "name": "Staff 4",
-        "dni": "70000004",
-        "role": "staff",
-        "email_suffix": "staff4",
-        "phone": "+51 900000104",
-        "status": "activo",
-    },
-    {
-        "id_staff_suffix": "staff5",
-        "name": "Staff 5",
-        "dni": "70000005",
-        "role": "staff",
-        "email_suffix": "staff5",
-        "phone": "+51 900000105",
-        "status": "activo",
-    },
-    # 5 delivery
+    # 3 delivery
     {
         "id_staff_suffix": "delivery1",
         "name": "Repartidor 1",
@@ -106,24 +89,6 @@ STAFF_PER_TENANT = [
         "role": "delivery",
         "email_suffix": "delivery3",
         "phone": "+51 900000203",
-        "status": "activo",
-    },
-    {
-        "id_staff_suffix": "delivery4",
-        "name": "Repartidor 4",
-        "dni": "60000004",
-        "role": "delivery",
-        "email_suffix": "delivery4",
-        "phone": "+51 900000204",
-        "status": "activo",
-    },
-    {
-        "id_staff_suffix": "delivery5",
-        "name": "Repartidor 5",
-        "dni": "60000005",
-        "role": "delivery",
-        "email_suffix": "delivery5",
-        "phone": "+51 900000205",
         "status": "activo",
     },
 ]

@@ -10,9 +10,10 @@ S3_BUCKET_NAME = "papasqueens-menu-images"
 IMAGES_LOCAL_DIR = os.path.join(os.path.dirname(__file__), "menu-images")
 
 TENANTS = [
-    "tenant_pq_barranco",
-    "tenant_pq_san_isidro",
-    "tenant_pq_miraflores",
+    "tenant_pq_barranco",      # Sede Barranco (UTEC)
+    "tenant_pq_puruchuco",     # Sede Puruchuco
+    "tenant_pq_villamaria",    # Sede Villa María
+    "tenant_pq_jiron",         # Sede Jirón
 ]
 
 # Menú base de PapasQueen's
