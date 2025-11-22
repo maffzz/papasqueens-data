@@ -6,7 +6,7 @@ import boto3
 # Configuración
 DYNAMO_REGION = "us-east-1"
 TABLE_NAME = "MenuItems"
-S3_BUCKET_NAME = "papasqueens-menu-images"
+S3_BUCKET_NAME = "papasqueens-menu-image"
 IMAGES_LOCAL_DIR = os.path.join(os.path.dirname(__file__), "menu-images")
 
 TENANTS = [
