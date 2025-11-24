@@ -1,7 +1,7 @@
+#!/usr/bin/env python3
 import os
 import uuid
 import datetime
-
 import bcrypt
 import boto3
 
@@ -35,32 +35,51 @@ STAFF_PER_TENANT = [
         "phone": "+51 900000002",
         "status": "activo",
     },
-    # 3 staff (cocina/mostrador)
+    # 3 cocineros
     {
-        "id_staff_suffix": "staff1",
-        "name": "Staff 1",
+        "id_staff_suffix": "cocinero1",
+        "name": "Cocinero 1",
         "dni": "70000001",
-        "role": "staff",
-        "email_suffix": "staff1",
+        "role": "cocinero",
+        "email_suffix": "cocinero1",
         "phone": "+51 900000101",
         "status": "activo",
     },
     {
-        "id_staff_suffix": "staff2",
-        "name": "Staff 2",
+        "id_staff_suffix": "cocinero2",
+        "name": "Cocinero 2",
         "dni": "70000002",
-        "role": "staff",
-        "email_suffix": "staff2",
+        "role": "cocinero",
+        "email_suffix": "cocinero2",
         "phone": "+51 900000102",
         "status": "activo",
     },
     {
-        "id_staff_suffix": "staff3",
-        "name": "Staff 3",
+        "id_staff_suffix": "cocinero3",
+        "name": "Cocinero 3",
         "dni": "70000003",
-        "role": "staff",
-        "email_suffix": "staff3",
+        "role": "cocinero",
+        "email_suffix": "cocinero3",
         "phone": "+51 900000103",
+        "status": "activo",
+    },
+    # 2 empaquetadores
+    {
+        "id_staff_suffix": "empaquetador1",
+        "name": "Empaquetador 1",
+        "dni": "65000001",
+        "role": "empaquetador",
+        "email_suffix": "empaquetador1",
+        "phone": "+51 900000151",
+        "status": "activo",
+    },
+    {
+        "id_staff_suffix": "empaquetador2",
+        "name": "Empaquetador 2",
+        "dni": "65000002",
+        "role": "empaquetador",
+        "email_suffix": "empaquetador2",
+        "phone": "+51 900000152",
         "status": "activo",
     },
     # 3 delivery
@@ -107,15 +126,32 @@ def main():
     # Password fijo para todos los usuarios seed: 123456
     default_password = "123456"
     password_h = hash_password(default_password)
-
     now = datetime.datetime.utcnow().isoformat()
 
+    print("=" * 80)
+    print("🌱 SEED DE STAFF - PAPAS QUEEN'S")
+    print("=" * 80)
+    print(f"📋 Tabla: {TABLE_NAME}")
+    print(f"🔐 Password por defecto: {default_password}")
+    print(f"🏢 Tenants: {len(TENANTS)}")
+    print(f"👥 Staff por tenant: {len(STAFF_PER_TENANT)}")
+    print(f"📊 Total de registros a crear: {len(TENANTS) * len(STAFF_PER_TENANT)}")
+    print("=" * 80)
+    print()
+
+    total_created = 0
     for tenant in TENANTS:
         # usar el sufijo del tenant como id_sucursal simple
         id_sucursal = tenant.replace("tenant_", "suc_")
+        
+        print(f"🏪 Procesando tenant: {tenant}")
+        print(f"   ID Sucursal: {id_sucursal}")
+        print()
+
         for spec in STAFF_PER_TENANT:
             id_staff = f"{tenant}_{spec['id_staff_suffix']}"
             email = f"{spec['email_suffix']}@{tenant}.papasqueens.test"
+
             item = {
                 "tenant_id": tenant,
                 "id_staff": id_staff,
@@ -129,10 +165,56 @@ def main():
                 "hire_date": now,
                 "id_sucursal": id_sucursal,
             }
-            print(f"Seeding staff: {item['tenant_id']} / {item['id_staff']} ({item['email']})")
-            table.put_item(Item=item)
 
-    print("Seed de Staff completado. Password por defecto:", default_password)
+            role_emoji = {
+                "admin": "👔",
+                "cocinero": "👨‍🍳",
+                "empaquetador": "📦",
+                "delivery": "🚚"
+            }.get(spec["role"], "👤")
+
+            print(f"   {role_emoji} {spec['role'].upper():15} | {item['name']:20} | {email}")
+
+            try:
+                table.put_item(Item=item)
+                total_created += 1
+            except Exception as e:
+                print(f"      ❌ Error: {e}")
+
+        print()
+
+    print("=" * 80)
+    print(f"✅ Seed completado: {total_created} registros creados")
+    print(f"🔐 Password para todos: {default_password}")
+    print("=" * 80)
+    print()
+    print("📝 Resumen por rol:")
+    
+    roles_count = {}
+    for spec in STAFF_PER_TENANT:
+        role = spec["role"]
+        roles_count[role] = roles_count.get(role, 0) + 1
+    
+    for role, count in sorted(roles_count.items()):
+        role_emoji = {
+            "admin": "👔",
+            "cocinero": "👨‍🍳",
+            "empaquetador": "📦",
+            "delivery": "🚚"
+        }.get(role, "👤")
+        total_per_role = count * len(TENANTS)
+        print(f"   {role_emoji} {role.capitalize():15}: {count} por tenant × {len(TENANTS)} tenants = {total_per_role} total")
+    
+    print()
+    print("🔗 Ejemplos de login:")
+    print()
+    for tenant in TENANTS[:1]:  # Solo mostrar ejemplos del primer tenant
+        print(f"   Tenant: {tenant}")
+        print(f"   Admin:        admin1@{tenant}.papasqueens.test / 123456")
+        print(f"   Cocinero:     cocinero1@{tenant}.papasqueens.test / 123456")
+        print(f"   Empaquetador: empaquetador1@{tenant}.papasqueens.test / 123456")
+        print(f"   Delivery:     delivery1@{tenant}.papasqueens.test / 123456")
+    print()
 
 
 if __name__ == "__main__":
